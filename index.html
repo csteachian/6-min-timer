@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>6-Minute Countdown Timer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        #timer {
+            font-size: 4rem;
+            font-weight: bold;
+            background-color: #333;
+            color: #fff;
+            padding: 20px 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div id="timer">06:00</div>
+    <audio id="alarmSound">
+        <source src="https://www.soundjay.com/button/beep-07.wav" type="audio/wav">
+        Your browser does not support the audio element.
+    </audio>
+
+    <script>
+        const timerDisplay = document.getElementById('timer');
+        const alarmSound = document.getElementById('alarmSound');
+        let timeRemaining = 6 * 60; // 6 minutes in seconds
+        let timerInterval;
+
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = seconds % 60;
+            return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timeRemaining--;
+
+                if (timeRemaining >= 0) {
+                    timerDisplay.textContent = formatTime(timeRemaining);
+                } else {
+                    clearInterval(timerInterval);
+                    alarmSound.play();
+                    timeRemaining = 6 * 60; // Reset to 6 minutes
+                    timerDisplay.textContent = formatTime(timeRemaining);
+                    startTimer(); // Automatically restart the timer
+                }
+            }, 1000);
+        }
+
+        // Start the timer when the page loads
+        startTimer();
+    </script>
+</body>
+</html>
