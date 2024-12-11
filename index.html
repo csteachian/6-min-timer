@@ -57,7 +57,22 @@
                     timerDisplay.textContent = formatTime(timeRemaining);
                 } else {
                     clearInterval(timerInterval);
-                    alarmSound.play();
+
+                    // Reset audio to start
+                    alarmSound.currentTime = 0;
+                    
+                    // Ensure audio plays
+                    const playPromise = alarmSound.play();
+                    
+                    // Handle potential play() promise rejection
+                    if (playPromise !== undefined) {
+                        playPromise.then(() => {
+                            // Audio played successfully
+                        }).catch(error => {
+                            console.error('Error playing audio:', error);
+                        });
+                    }
+
                     timeRemaining = 6 * 60; // Reset to 6 minutes
                     timerDisplay.textContent = formatTime(timeRemaining);
                     startTimer(); // Automatically restart the timer
